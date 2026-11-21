@@ -33,8 +33,14 @@
 | **都市ビル・独立看板** | `C:\youtube\unity\Blender_make\City_Buildings_v01\` | ビル6種（`City_Bldg_01..06_Unity.fbx`）、独立看板ユニット2種（`SignBoard_Fascia/Blade_Unit.fbx`）、看板PNG 24枚 |
 | **街頭小物・ギャップ補完** | `C:\youtube\unity\Blender_make\Tokyo_StreetProps_v01\` | 街路小物・低木・隙間補完 17 FBX、`town_layout_manifest.json`（105件） |
 | **人物モデル** | `C:\youtube\unity\Blender_make\Tokyo_Humans_v01\` | 8体型（小学生・高校生・成人・老人 × 男女）FBX |
-| **走行車両** | `C:\youtube\unity\Blender_make\Tokyo_Vehicles_v01\` | セダン・ワゴン・都営バス 3 FBX、ナンバー/LED PNG 3枚 |
-| **Unity制御・構築** | `C:\youtube\unity\Autumn_Momiji\Assets\` | `Editor/MomijiAvenueSceneBuilder.cs`（`v8`）、`Scripts/Traffic/MomijiTrafficSignalController.cs`、`MomijiVehicleAgent.cs` |
+| **走行車両** | `C:\youtube\紅葉街道\03_Blender_車両運転手とUV修正\`（旧: `Tokyo_Vehicles_v01\`） | 運転手着座済みセダン・ワゴン・都営バス（BrainCAD運転席コックピット統合）3 FBX、ナンバー/LED PNG 3枚 |
+| **Unity制御・構築** | `C:\youtube\unity\Autumn_Momiji\Assets\`（正本同期: `紅葉街道\04_Unity_当たり判定とテクスチャ修正\`） | `Editor/MomijiAvenueSceneBuilder.cs`（`v9`）、`Editor/MomijiAutoMaterialSetup.cs`、`Scripts/MomijiPedestrian.cs`、`Scripts/Traffic/MomijiTrafficSignalController.cs`、`MomijiVehicleAgent.cs` |
+
+### 継続制作ワークスペース・街素材統合ライブラリ（2026-11-21 追加）
+- **新規制作・改修工程ワークスペース**: `C:\youtube\紅葉街道\`（プライベート GitHub: `lotus999-cyber/momiji-kaido-workspace`）
+  - `01_設計と調査/`・`02_CAD_運転手と車内パーツ/`・`03_Blender_車両運転手とUV修正/`・`04_Unity_当たり判定とテクスチャ修正/`・`scripts/`
+- **種別ごとの統合街素材ライブラリ**: `C:\youtube\街素材\`（過去パーツを非破壊で種別単位の6 `.blend` ＋共通 `textures/` へ統合）
+  - `街素材_道路インフラ.blend` / `街素材_樹木自然.blend` / `街素材_建物看板.blend` / `街素材_街頭小物と隙間補完.blend` / `街素材_人物.blend` / `街素材_車両.blend`（一覧: `C:\youtube\街素材\README_街素材カタログ.md`）
 
 ---
 

@@ -56,6 +56,8 @@
     - Import BrainCAD `--export-unity` OBJs into Blender 5.3 with `forward_axis='NEGATIVE_Z', up_axis='Y'`, call `bmesh.ops.remove_doubles(bm, verts=bm.verts, dist=1e-4)`, and **never** run `bmesh.ops.bevel` on triangulated/thin-slat CAD OBJ imports (prevents louver/trim spike artifacts).
 13. **Pre-Layout Elevation & Furniture Audit**:
     - Query exact world bounds before placing street props, gap infills, bus stops, or pedestrians: e.g., `Road_Sidewalk` (`Z=+0.120m`), `Road_OuterGround` (`Z=+0.108m`), `Konbini_Walkway` (`Z=+0.155m`), `GuardPipe_*` (`X=±6.73..7.23m`), `StreetLight_*` poles, and building entrance bays. Open bus-stop guardrail bays cleanly in the road build scripts rather than placing stops behind guardrails.
+14. **Degenerate Bevel UV Repair via Face-Normal Orthonormal Basis `(tangent, bitangent)`**:
+    - Axis-aligned Box UV projection collapses narrow/vertical bevel faces when `(u, v)` spans degenerate (`area <= 1e-8`), causing stretched stripes in Unity. Iterate only faces whose UV triangle area falls below threshold, build an orthonormal tangent/bitangent basis `(T, B)` from the polygon normal `N`, and project loop coordinates `(v.co.dot(T), v.co.dot(B))` without altering valid UVs or Empty anchors.
 
 ## 3. Unity 6 URP (`6000.6.9f1`, URP `17.6.0`) Builder Patterns
 
@@ -85,3 +87,11 @@
    - Before invoking headless Unity, check `Get-Process *Unity*` and `Temp\UnityLockfile`; never launch `-batchmode` while Unity Editor is open.
    - If Unity Hub / Editor is completely closed on a Personal license without `com.unity.editor.headless`, `Unity.exe -batchmode` exits with code `198`; advise opening via Unity Hub (`[InitializeOnLoad]`) instead of bypassing license checks.
    - Always invoke WinExe binaries (`BrainCAD.UI.exe`, `Unity.exe`) with `Start-Process -Wait -PassThru` to capture `.ExitCode`.
+8. **URP 17 `_EMISSION` Stripping Fix (`RealtimeEmissive`)**:
+   - In Unity 6 / URP 17, calling `mat.EnableKeyword("_EMISSION")` alone leaves `m_ValidKeywords: []` in serialized `.mat` YAML and strips emission at runtime. Always set `mat.globalIlluminationFlags = MaterialGlobalIlluminationFlags.RealtimeEmissive;` (and assign `_EmissionMap` / `_EmissionColor` for illuminated signs such as `Konbini_Fascia_*`, shop signs, headlights, and signal lenses).
+9. **URP Transparent Glass Visibility (`ShadowCaster` Disable & No Premultiply)**:
+   - Opaque shadows or `_ALPHAPREMULTIPLY_ON` on storefront/vehicle glass hide interior seating, drivers, and shop details. Set `Surface = Transparent`, keep `_ALPHAPREMULTIPLY_ON` disabled, tune alpha explicitly (e.g., `Vehicle_Glass` alpha `0.28` with `Bldg_Glass_Shop` transparent), and call `mat.SetShaderPassEnabled("ShadowCaster", false);`.
+10. **Clean Prefab-Time Colliders, Kinematic Vehicles & Stale Remap Cleanup**:
+    - Guard static collider generation by excluding non-solid decor meshes (`FallenLeaves`, `Lane`, `Marking`, `Canopy`, `Foliage`, etc.) and setting `ModelImporter.isReadable = true` (plus `mesh.isReadable` check) on static collidable FBXs.
+    - Bake `CapsuleCollider` on trees/humans, `MeshCollider` on `TrafficSignals`, and `BoxCollider` + kinematic `Rigidbody` (driven in `FixedUpdate` via `Rigidbody.MovePosition` with pedestrian yielding / lateral push-out) on vehicles (`MomijiVehicleAgent`), avoiding raw mesh colliders on foliage or scattered leaves.
+    - Protect `Assets/MomijiAvenue100m/` from generic auto-material postprocessors, call `imp.RemoveRemap(...)` to purge stale GUID remaps before applying current remaps, and match A-frame poster slots by `"Board"` rather than broad `"Sign"` substrings.
