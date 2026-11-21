@@ -1,0 +1,12 @@
+{
+  "compact-context-guard": {
+    "enabled": true,
+    "PreInvocation": [
+      {
+        "type": "command",
+        "command": "python \"C:/Users/kazu3/.gemini/config/hooks/compact_guard.py\"",
+        "timeout": 5
+      }
+    ]
+  }
+}
